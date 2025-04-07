@@ -1,6 +1,7 @@
 import { useState } from "react";
-
-import { transfer } from "./transactionsSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectBalance } from "./transactionsSlice";
+import { transfer, withdrawal, deposit } from "./transactionsSlice";
 import "./transactions.scss";
 
 /**
@@ -8,10 +9,12 @@ import "./transactions.scss";
  */
 export default function Transactions() {
   // TODO: Get the balance from the Redux store using the useSelector hook
-  const balance = 0;
-
+  const balance = useSelector(selectBalance);
+  
+  const dispatch = useDispatch();
   const [amountStr, setAmountStr] = useState("0.00");
   const [recipient, setRecipient] = useState("");
+  const [disableBtn, setDisableBtn] = useState(false);
 
   /** Dispatches a transaction action based on the form submission. */
   const onTransaction = (e) => {
@@ -24,13 +27,37 @@ export default function Transactions() {
     const amount = +amountStr;
 
     // TODO: Dispatch the appropriate transaction action based on `action`
-    if (action === "transfer") {
-      // The `transfer` action is dispatched with a payload containing
-      // the amount and the recipient.
-      dispatch(transfer({ amount, recipient }));
+    // if (action === "transfer") {
+    //   // The `transfer` action is dispatched with a payload containing
+    //   // the amount and the recipient.
+    //   dispatch(transfer({ amount, recipient }));
+    // }
+    switch (action) {
+      case 'transfer':
+        dispatch(transfer({ amount, recipient }));
+        break;
+      case 'withdraw':
+        dispatch(withdrawal({ amount }));
+        break;
+      case 'deposit':
+        dispatch(deposit({ amount }));
+        break;
+      default:
+        break;
     }
-  };
 
+  };
+  const handleOnChange = (e) => {
+    console.log(e.target.name);
+    if (e.target.name === 'recipient') {
+      setRecipient(e.target.value);
+    } else if (e.target.name === 'amount') {
+     setAmountStr(e.target.value); 
+    }
+
+    amountStr > balance ? setDisableBtn(true) : setDisableBtn(false);
+    
+  }
   return (
     <section className="transactions container">
       <h2>Transactions</h2>
@@ -43,19 +70,22 @@ export default function Transactions() {
           <label>
             Amount
             <input
+              name="amount"
               type="number"
               inputMode="decimal"
               min={0}
               step="0.01"
               value={amountStr}
-              onChange={(e) => setAmountStr(e.target.value)}
+              onChange={handleOnChange}
             />
           </label>
           <div>
             <button default name="deposit">
               Deposit
             </button>
-            <button name="withdraw">Withdraw</button>
+            <button name="withdraw" disabled={disableBtn}>
+              Withdraw
+            </button>
           </div>
         </div>
         <div className="form-row">
@@ -65,10 +95,12 @@ export default function Transactions() {
               placeholder="Recipient Name"
               name="recipient"
               value={recipient}
-              onChange={(e) => setRecipient(e.target.value)}
+              onChange={handleOnChange}
             />
           </label>
-          <button name="transfer">Transfer</button>
+          <button name="transfer" disabled={disableBtn}>
+            Transfer
+          </button>
         </div>
       </form>
     </section>

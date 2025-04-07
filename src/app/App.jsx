@@ -3,6 +3,7 @@ import Transactions from "../features/transactions/Transactions";
 
 import "./app.css";
 
+
 // TODO: Import the Redux store and provide it to this component using <Provider>.
 export default function App() {
   return (

@@ -25,12 +25,31 @@ Refer to the "withdrawal" reducer, which is already implemented for you.
 
 const transactionsSlice = createSlice({
   name: "transactions",
-  initialState,
+  initialState: {
+  balance: 0,
+    history:[],
+  },
   reducers: {
     withdrawal: (state, { payload }) => {
       state.balance -= payload.amount;
       state.history.push({
         type: "withdrawal",
+        amount: payload.amount,
+        balance: state.balance,
+      });
+    },
+    deposit: (state, { payload }) => {
+      state.balance += payload.amount;
+      state.history.push({
+        type: "deposit",
+        amount: payload.amount,
+        balance: state.balance,
+      });
+    },
+    transfer: (state, { payload }) => {
+      state.balance -= payload.amount;
+      state.history.push({
+        type: `transfer/${payload.recipient}`,
         amount: payload.amount,
         balance: state.balance,
       });
