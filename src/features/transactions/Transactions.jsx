@@ -49,7 +49,7 @@ export default function Transactions() {
 
   };
   const handleOnChange = (e) => {
-    amountStr > balance ? setDisableBtn(true) : setDisableBtn(false);
+    amountStr > balance || balance === 0 ? setDisableBtn(true) : setDisableBtn(false);
     console.log(e.target.name);
     if (e.target.name === 'recipient') {
       setRecipient(e.target.value);
