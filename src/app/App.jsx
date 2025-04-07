@@ -2,7 +2,6 @@ import { store } from "./store";
 import { Provider } from "react-redux";
 import TransactionHistory from "../features/transactions/TransactionHistory";
 import Transactions from "../features/transactions/Transactions";
-
 import "./app.css";
 
 // TODO: Import the Redux store and provide it to this component using <Provider>.

@@ -25,7 +25,7 @@ Refer to the "withdrawal" reducer, which is already implemented for you.
 
 const transactionsSlice = createSlice({
   name: "transactions",
-  initialState: {
+  initialState:{
   balance: 0,
     history:[],
   },
