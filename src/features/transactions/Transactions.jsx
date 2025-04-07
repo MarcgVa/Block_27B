@@ -10,7 +10,8 @@ import "./transactions.scss";
 export default function Transactions() {
   // TODO: Get the balance from the Redux store using the useSelector hook
   const balance = useSelector(selectBalance);
-  
+  sessionStorage.setItem('balance', balance);
+
   const dispatch = useDispatch();
   const [amountStr, setAmountStr] = useState("0.00");
   const [recipient, setRecipient] = useState("");
@@ -48,6 +49,7 @@ export default function Transactions() {
 
   };
   const handleOnChange = (e) => {
+    amountStr > balance ? setDisableBtn(true) : setDisableBtn(false);
     console.log(e.target.name);
     if (e.target.name === 'recipient') {
       setRecipient(e.target.value);
@@ -55,7 +57,7 @@ export default function Transactions() {
      setAmountStr(e.target.value); 
     }
 
-    amountStr > balance ? setDisableBtn(true) : setDisableBtn(false);
+    
     
   }
   return (
